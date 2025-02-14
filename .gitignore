@@ -1,0 +1,13 @@
+# Ignorer les fichiers ZIP
+*.zip
+
+# Ignorer les modèles et données lourdes
+*.h5
+*.pkl
+*.csv
+*.json
+
+# Ignorer les dossiers inutiles
+__pycache__/
+venv/
+

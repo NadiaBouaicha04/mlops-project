@@ -1,0 +1,33 @@
+import pandas as pd 
+import numpy as np 
+from sklearn.model_selection import train_test_split 
+from sklearn.metrics import accuracy_score 
+from sklearn.preprocessing import StandardScaler, LabelEncoder 
+import joblib 
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+fsklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+import xgboost as xgb
+
+def prepare_data(data_path='Churn_Modelling.csv'):
+    # Chargement des données depuis le fichier CSV
+    data = pd.read_csv(data_path)
+
+    # Importation d'un encodeur pour transformer les données catégoriques en numériques
+    encoder = LabelEncoder()
+
+    # Encodage des colonnes catégorielles
+    data['State'] = encoder.fit_transform(data['State'])
+    data['International plan'] = encoder.fit_transform(data['International plan'])
+    data['Voice mail plan'] = encoder.fit_transform(data['Voice mail plan'])
+    data['Churn'] = encoder.fit_transform(data['Churn'])
+
+    # Suppression des colonnes inutiles pour la prédiction
+    data = data.drop(['Number vmail messages', 'Total day charge', 'Total eve charge', 
+                      'Total night charge', 'Total intl charge'], axis=1)
+
+    # Séparation des données en caractéristiques (X) et cible (y)
+    X = data.drop(['Churn'], axis=1)  
+    y
