@@ -1,67 +1,84 @@
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-import joblib
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression
+# Déclaration des variables
+PYTHON=python3
+ENV_NAME=mlops_env
+REQUIREMENTS=requirements.txt
+DATA_PATH=Churn_Modelling.csv
+MODEL_PATH=models/churn_model.pkl
 
-def prepare_data(data_path='Churn_Modelling.csv'):
-    data = pd.read_csv(data_path)
+# 1. Configuration de l'environnement
+setup:
+	@echo "Création de l'environnement virtuel et installation des dépendances..."
+	@$(PYTHON) -m venv $(ENV_NAME)
+	@. $(ENV_NAME)/bin/activate && pip install --upgrade pip
+	@. $(ENV_NAME)/bin/activate && pip install -r $(REQUIREMENTS)
 
-    encoder = LabelEncoder()
-    data['State'] = encoder.fit_transform(data['State'])
-    data['International plan'] = encoder.fit_transform(data['International plan'])
-    data['Voice mail plan'] = encoder.fit_transform(data['Voice mail plan'])
-    data['Churn'] = encoder.fit_transform(data['Churn'])
+# 2. Vérification des dépendances
+deps:
+	@echo "Installation des dépendances..."
+	@if [ -f $(REQUIREMENTS) ]; then . $(ENV_NAME)/bin/activate && pip install -r $(REQUIREMENTS); else echo "Fichier requirements.txt non trouvé"; fi
 
-    data = data.drop(['Number vmail messages', 'Total day charge', 'Total eve charge', 
-                      'Total night charge', 'Total intl charge'], axis=1)
+# 3. Vérification du style de code avec flake8
+lint:
+	@echo "Vérification du style de code..."
+	@. $(ENV_NAME)/bin/activate && flake8 --max-line-length=100 .
 
-    X = data.drop(['Churn'], axis=1)
-    y = data['Churn']
+# 4. Préparation des données
+prepare:
+	@echo "Préparation des données..."
+	@. $(ENV_NAME)/bin/activate && python3 main.py --prepare --data_path $(DATA_PATH)
 
-    x_train, x_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y)
+# 5. Entraînement du modèle
+train:
+	@echo "Entraînement du modèle..."
+	@. $(ENV_NAME)/bin/activate && python3 main.py --train --data_path $(DATA_PATH)
 
-    scaler = StandardScaler()
-    x_train_scaled = scaler.fit_transform(x_train)
-    x_test_scaled = scaler.transform(x_test)
+# 6. Évaluation du modèle
+evaluate:
+	@echo "Évaluation du modèle..."
+	@. $(ENV_NAME)/bin/activate && python3 main.py --evaluate --data_path $(DATA_PATH) --model_path $(MODEL_PATH)
 
-    joblib.dump(scaler, 'scaler.joblib')
+# 7. Sauvegarde du modèle
+save:
+	@echo "Sauvegarde du modèle..."
+	@. $(ENV_NAME)/bin/activate && python3 main.py --save --data_path $(DATA_PATH) --model_path $(MODEL_PATH)
 
-    return x_train_scaled, x_test_scaled, y_train, y_test
+# 8. Charger le modèle avec vérification
+load:
+	@echo "Chargement du modèle..."
+	@if [ -f $(MODEL_PATH) ]; then \
+		. $(ENV_NAME)/bin/activate && python3 main.py --load --model_path $(MODEL_PATH); \
+	else \
+		echo "Modèle non trouvé ! Entraînez-le d'abord."; \
+	fi
 
-def train_model(X_train, y_train, model_name="Random Forest"):
-    models = {
-        "Random Forest": RandomForestClassifier(max_depth=20, n_estimators=20, random_state=42),
-        "Decision Tree": DecisionTreeClassifier(max_depth=9, random_state=42),
-        "SVM (RBF Kernel)": SVC(kernel='rbf', C=1000, probability=True, random_state=42),
-        "Logistic Regression": LogisticRegression(C=0.01, penalty='l2', solver='liblinear', random_state=42)
-    }
+# 9. Exécution des tests unitaires
+test:
+	@echo "Lancement des tests..."
+	@. $(ENV_NAME)/bin/activate && pytest tests/
 
-    model = models[model_name]
-    model.fit(X_train, y_train)
-    return model
+# 10. Nettoyer les fichiers générés
+clean:
+	@echo "Suppression des fichiers temporaires et artefacts..."
+	rm -rf __pycache__
+	rm -rf *.pyc
+	rm -rf *.pkl
+	rm -rf $(ENV_NAME)
 
-def evaluate_model(model, X_test, y_test):
-    y_pred = model.predict(X_test)
+# 11. Démarrer le serveur Jupyter Notebook
+.PHONY: notebook
+notebook:
+	@echo "Démarrage de Jupyter Notebook..."
+	@if [ -z "$$VIRTUAL_ENV" ]; then \
+		bash -c "source $(ENV_NAME)/bin/activate && jupyter notebook"; \
+	else \
+		jupyter notebook; \
+	fi
 
-    print("Rapport de classification:")
-    print(classification_report(y_test, y_pred))
+# 12. Test automatique de l'ensemble du processus
+.PHONY: test_pipeline
+test_pipeline: setup deps lint prepare train evaluate save load test clean
+	@echo "Test automatique passé avec succès !"
 
-    print("Matrice de confusion:")
-    print(confusion_matrix(y_test, y_pred))
-
-def save_model(model, model_path):
-    # Sauvegarde du modèle
-    joblib.dump(model, model_path)
-    print(f"Modèle sauvegardé dans {model_path}.")
-
-def load_model(model_path):
-    return joblib.load(model_path)
+# 13. Exécution complète
+test_all: test_pipeline
 
