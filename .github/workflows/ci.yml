@@ -31,12 +31,12 @@ jobs:
       - name: Run Black (Code Formatting)
         run: |
           source venv/bin/activate
-          black --check .
+          black --check . --exclude "venv|mlops_env|site-packages"
 
       - name: Run Pylint (Code Linting)
         run: |
           source venv/bin/activate
-          pylint api.py model_pipeline.py main.py
+          pylint api.py model_pipeline.py main.py --ignore=venv,mlops_env,site-packages
 
       - name: Run Mypy (Type Checking)
         run: |
