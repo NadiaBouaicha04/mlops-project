@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/ae4cb57648164bf69a92b1e97c4a2e99/artifacts
+end_time: 1740073765959
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ae4cb57648164bf69a92b1e97c4a2e99
+run_name: dapper-sponge-278
+run_uuid: ae4cb57648164bf69a92b1e97c4a2e99
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740073765881
+status: 3
+tags: []
+user_id: nadia

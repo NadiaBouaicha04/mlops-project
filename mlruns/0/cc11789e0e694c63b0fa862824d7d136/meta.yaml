@@ -1,0 +1,16 @@
+artifact_uri: mlflow-artifacts:/0/cc11789e0e694c63b0fa862824d7d136/artifacts
+deleted_time: 1739641868105
+end_time: 1739640139376
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: cc11789e0e694c63b0fa862824d7d136
+run_name: smiling-frog-476
+run_uuid: cc11789e0e694c63b0fa862824d7d136
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739640139364
+status: 3
+tags: []
+user_id: nadia

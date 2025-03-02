@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/44559c3a7e454e5d8b3e2564ebc8e376/artifacts
+end_time: 1740326662067
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 44559c3a7e454e5d8b3e2564ebc8e376
+run_name: resilient-snake-958
+run_uuid: 44559c3a7e454e5d8b3e2564ebc8e376
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740326662015
+status: 4
+tags: []
+user_id: nadia

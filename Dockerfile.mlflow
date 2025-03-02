@@ -1,0 +1,19 @@
+# Utilisation d'une image Python légère
+FROM python:3.8-slim
+
+# Définition du répertoire de travail
+WORKDIR /mlflow
+
+# Installation des dépendances
+RUN pip install --no-cache-dir mlflow gunicorn
+
+# Définition des variables d'environnement
+ENV MLFLOW_TRACKING_URI=http://0.0.0.0:5000
+ENV BACKEND_STORE_URI=sqlite:///mlflow.db
+
+# Exposer le port 5000
+EXPOSE 5000
+
+# Lancer MLflow comme serveur
+CMD ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:///mlflow.db", "--default-artifact-root", "/mlflow"]
+

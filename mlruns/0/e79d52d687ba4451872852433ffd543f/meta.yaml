@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/e79d52d687ba4451872852433ffd543f/artifacts
+end_time: 1740072883986
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e79d52d687ba4451872852433ffd543f
+run_name: indecisive-toad-87
+run_uuid: e79d52d687ba4451872852433ffd543f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740072883949
+status: 3
+tags: []
+user_id: nadia

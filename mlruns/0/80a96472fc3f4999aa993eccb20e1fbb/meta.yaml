@@ -1,0 +1,16 @@
+artifact_uri: mlflow-artifacts:/0/80a96472fc3f4999aa993eccb20e1fbb/artifacts
+deleted_time: 1739641868107
+end_time: 1739640243653
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 80a96472fc3f4999aa993eccb20e1fbb
+run_name: bedecked-boar-535
+run_uuid: 80a96472fc3f4999aa993eccb20e1fbb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739640243447
+status: 4
+tags: []
+user_id: nadia

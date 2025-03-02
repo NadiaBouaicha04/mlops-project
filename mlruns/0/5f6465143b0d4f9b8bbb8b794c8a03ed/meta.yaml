@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/5f6465143b0d4f9b8bbb8b794c8a03ed/artifacts
+end_time: 1740326724880
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5f6465143b0d4f9b8bbb8b794c8a03ed
+run_name: trusting-roo-988
+run_uuid: 5f6465143b0d4f9b8bbb8b794c8a03ed
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740326724436
+status: 3
+tags: []
+user_id: nadia

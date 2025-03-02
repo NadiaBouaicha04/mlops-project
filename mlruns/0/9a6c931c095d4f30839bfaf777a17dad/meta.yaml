@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/9a6c931c095d4f30839bfaf777a17dad/artifacts
+end_time: 1739641779619
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9a6c931c095d4f30839bfaf777a17dad
+run_name: overjoyed-newt-750
+run_uuid: 9a6c931c095d4f30839bfaf777a17dad
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739641772307
+status: 3
+tags: []
+user_id: nadia

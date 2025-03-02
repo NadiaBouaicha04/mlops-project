@@ -1,84 +1,81 @@
-# Déclaration des variables
-PYTHON=python3
-ENV_NAME=mlops_env
-REQUIREMENTS=requirements.txt
-DATA_PATH=Churn_Modelling.csv
-MODEL_PATH=models/churn_model.pkl
+"""
+Pipeline de préparation des données, d'entraînement et d'évaluation du modèle.
+"""
 
-# 1. Configuration de l'environnement
-setup:
-	@echo "Création de l'environnement virtuel et installation des dépendances..."
-	@$(PYTHON) -m venv $(ENV_NAME)
-	@. $(ENV_NAME)/bin/activate && pip install --upgrade pip
-	@. $(ENV_NAME)/bin/activate && pip install -r $(REQUIREMENTS)
+import joblib
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.metrics import accuracy_score, f1_score
+from sklearn.base import ClassifierMixin
+from typing import Tuple
 
-# 2. Vérification des dépendances
-deps:
-	@echo "Installation des dépendances..."
-	@if [ -f $(REQUIREMENTS) ]; then . $(ENV_NAME)/bin/activate && pip install -r $(REQUIREMENTS); else echo "Fichier requirements.txt non trouvé"; fi
 
-# 3. Vérification du style de code avec flake8
-lint:
-	@echo "Vérification du style de code..."
-	@. $(ENV_NAME)/bin/activate && flake8 --max-line-length=100 .
+def prepare_data(data_path: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Charge et prépare les données pour l'entraînement."""
+    data = pd.read_csv(data_path)
 
-# 4. Préparation des données
-prepare:
-	@echo "Préparation des données..."
-	@. $(ENV_NAME)/bin/activate && python3 main.py --prepare --data_path $(DATA_PATH)
+    # Encodage des variables catégorielles
+    categorical_cols = data.select_dtypes(include=['object']).columns.tolist()
+    if categorical_cols:
+        print(f"Encodage des colonnes catégorielles : {categorical_cols}")
+        encoder = LabelEncoder()
+        for col in categorical_cols:
+            data[col] = encoder.fit_transform(data[col])
 
-# 5. Entraînement du modèle
-train:
-	@echo "Entraînement du modèle..."
-	@. $(ENV_NAME)/bin/activate && python3 main.py --train --data_path $(DATA_PATH)
+    # Séparation en features et target
+    features = data.drop(['Churn'], axis=1).values
+    target = data['Churn'].values
 
-# 6. Évaluation du modèle
-evaluate:
-	@echo "Évaluation du modèle..."
-	@. $(ENV_NAME)/bin/activate && python3 main.py --evaluate --data_path $(DATA_PATH) --model_path $(MODEL_PATH)
+    x_train, x_test, y_train, y_test = train_test_split(
+        features, target, test_size=0.2, random_state=42, stratify=target
+    )
 
-# 7. Sauvegarde du modèle
-save:
-	@echo "Sauvegarde du modèle..."
-	@. $(ENV_NAME)/bin/activate && python3 main.py --save --data_path $(DATA_PATH) --model_path $(MODEL_PATH)
+    # Normalisation des données
+    scaler = StandardScaler()
+    x_train_scaled = scaler.fit_transform(x_train)
+    x_test_scaled = scaler.transform(x_test)
 
-# 8. Charger le modèle avec vérification
-load:
-	@echo "Chargement du modèle..."
-	@if [ -f $(MODEL_PATH) ]; then \
-		. $(ENV_NAME)/bin/activate && python3 main.py --load --model_path $(MODEL_PATH); \
-	else \
-		echo "Modèle non trouvé ! Entraînez-le d'abord."; \
-	fi
+    # Sauvegarde du scaler
+    joblib.dump(scaler, 'scaler.joblib')
 
-# 9. Exécution des tests unitaires
-test:
-	@echo "Lancement des tests..."
-	@. $(ENV_NAME)/bin/activate && pytest tests/
+    return x_train_scaled, x_test_scaled, y_train, y_test
 
-# 10. Nettoyer les fichiers générés
-clean:
-	@echo "Suppression des fichiers temporaires et artefacts..."
-	rm -rf __pycache__
-	rm -rf *.pyc
-	rm -rf *.pkl
-	rm -rf $(ENV_NAME)
 
-# 11. Démarrer le serveur Jupyter Notebook
-.PHONY: notebook
-notebook:
-	@echo "Démarrage de Jupyter Notebook..."
-	@if [ -z "$$VIRTUAL_ENV" ]; then \
-		bash -c "source $(ENV_NAME)/bin/activate && jupyter notebook"; \
-	else \
-		jupyter notebook; \
-	fi
+def train_model(x_train: np.ndarray, y_train: np.ndarray, model_type: str = "RandomForest") -> ClassifierMixin:
+    """Entraîne un modèle de machine learning et le retourne."""
+    models = {
+        "RandomForest": RandomForestClassifier(n_estimators=100, random_state=42),
+        "DecisionTree": DecisionTreeClassifier(random_state=42),
+        "SVM": SVC(kernel='linear', probability=True),
+        "LogisticRegression": LogisticRegression()
+    }
 
-# 12. Test automatique de l'ensemble du processus
-.PHONY: test_pipeline
-test_pipeline: setup deps lint prepare train evaluate save load test clean
-	@echo "Test automatique passé avec succès !"
+    if model_type not in models:
+        raise ValueError(f"Modèle non reconnu. Choisissez parmi {list(models.keys())}")
 
-# 13. Exécution complète
-test_all: test_pipeline
+    model = models[model_type]
+    model.fit(x_train, y_train)
+
+    return model
+
+
+def evaluate_model(model: ClassifierMixin, x_test: np.ndarray, y_test: np.ndarray) -> Tuple[float, float]:
+    """Évalue le modèle et retourne accuracy et f1-score."""
+    y_pred = model.predict(x_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred, average="macro")
+
+    return accuracy, f1
+
+
+def save_model(model: ClassifierMixin, model_path: str) -> None:
+    """Sauvegarde le modèle entraîné."""
+    joblib.dump(model, model_path)
+    print(f" Modèle sauvegardé sous {model_path}")
 

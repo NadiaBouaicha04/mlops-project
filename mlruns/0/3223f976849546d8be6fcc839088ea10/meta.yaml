@@ -1,0 +1,16 @@
+artifact_uri: mlflow-artifacts:/0/3223f976849546d8be6fcc839088ea10/artifacts
+deleted_time: 1740071868145
+end_time: 1740071621416
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 3223f976849546d8be6fcc839088ea10
+run_name: traveling-lark-357
+run_uuid: 3223f976849546d8be6fcc839088ea10
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740071620037
+status: 4
+tags: []
+user_id: nadia

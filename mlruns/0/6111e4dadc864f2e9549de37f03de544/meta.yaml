@@ -1,0 +1,16 @@
+artifact_uri: mlflow-artifacts:/0/6111e4dadc864f2e9549de37f03de544/artifacts
+deleted_time: 1739641867790
+end_time: 1739640388997
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 6111e4dadc864f2e9549de37f03de544
+run_name: rare-hen-546
+run_uuid: 6111e4dadc864f2e9549de37f03de544
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739640386124
+status: 4
+tags: []
+user_id: nadia

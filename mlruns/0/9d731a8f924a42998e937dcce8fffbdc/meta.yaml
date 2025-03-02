@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/9d731a8f924a42998e937dcce8fffbdc/artifacts
+end_time: 1739641788425
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9d731a8f924a42998e937dcce8fffbdc
+run_name: adaptable-carp-93
+run_uuid: 9d731a8f924a42998e937dcce8fffbdc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1739641785390
+status: 3
+tags: []
+user_id: nadia
