@@ -151,9 +151,7 @@ class HTML5TreeBuilder(HTMLTreeBuilder):
             doc.original_encoding = original_encoding
         self.underlying_builder.parser = None
 
-    def create_treebuilder(
-        self, namespaceHTMLElements: bool
-    ) -> "TreeBuilderForHtml5lib":
+    def create_treebuilder(self, namespaceHTMLElements: bool) -> "TreeBuilderForHtml5lib":
         """Called by html5lib to instantiate the kind of class it
         calls a 'TreeBuilder'.
 
@@ -230,9 +228,7 @@ class TreeBuilderForHtml5lib(treebuilder_base.TreeBuilder):
             sourceline, sourcepos = self.parser.tokenizer.stream.position()
             assert sourcepos is not None
             sourcepos = sourcepos - 1
-        tag = self.soup.new_tag(
-            name, namespace, sourceline=sourceline, sourcepos=sourcepos
-        )
+        tag = self.soup.new_tag(name, namespace, sourceline=sourceline, sourcepos=sourcepos)
 
         return Element(tag, self.soup, namespace)
 
@@ -292,16 +288,13 @@ class AttrList(object):
         # turn its value into a list.
         list_attr = self.element.cdata_list_attributes or {}
         if name in list_attr.get("*", []) or (
-            self.element.name in list_attr
-            and name in list_attr.get(self.element.name, [])
+            self.element.name in list_attr and name in list_attr.get(self.element.name, [])
         ):
             # A node that is being cloned may have already undergone
             # this procedure. Check for this and skip it.
             if not isinstance(value, list):
                 assert isinstance(value, str)
-                value = self.element.attribute_value_list_class(
-                    nonwhitespace_re.findall(value)
-                )
+                value = self.element.attribute_value_list_class(nonwhitespace_re.findall(value))
         self.element[name] = value
 
     def items(self) -> Iterable[Tuple[str, _AttributeValue]]:
@@ -345,9 +338,7 @@ class Element(BeautifulSoupNode):
     element: Tag
     namespace: Optional[_NamespaceURL]
 
-    def __init__(
-        self, element: Tag, soup: "BeautifulSoup", namespace: Optional[_NamespaceURL]
-    ):
+    def __init__(self, element: Tag, soup: "BeautifulSoup", namespace: Optional[_NamespaceURL]):
         treebuilder_base.Node.__init__(self, element.name)
         self.element = element
         self.soup = soup
@@ -362,11 +353,7 @@ class Element(BeautifulSoupNode):
             child = node.element
         node.parent = self
 
-        if (
-            child is not None
-            and child.parent is not None
-            and not isinstance(child, str)
-        ):
+        if child is not None and child.parent is not None and not isinstance(child, str):
             node.element.extract()
 
         if (
@@ -432,9 +419,7 @@ class Element(BeautifulSoupNode):
 
             # Values for tags like 'class' came in as single strings;
             # replace them with lists of strings as appropriate.
-            self.soup.builder._replace_cdata_list_attribute_values(
-                self.name, normalized_attributes
-            )
+            self.soup.builder._replace_cdata_list_attribute_values(self.name, normalized_attributes)
 
             # Then set the attributes on the Tag associated with this
             # BeautifulSoupNode.
@@ -450,18 +435,14 @@ class Element(BeautifulSoupNode):
 
     attributes = property(getAttributes, setAttributes)
 
-    def insertText(
-        self, data: str, insertBefore: Optional["BeautifulSoupNode"] = None
-    ) -> None:
+    def insertText(self, data: str, insertBefore: Optional["BeautifulSoupNode"] = None) -> None:
         text = TextNode(self.soup.new_string(data), self.soup)
         if insertBefore:
             self.insertBefore(text, insertBefore)
         else:
             self.appendChild(text)
 
-    def insertBefore(
-        self, node: "BeautifulSoupNode", refNode: "BeautifulSoupNode"
-    ) -> None:
+    def insertBefore(self, node: "BeautifulSoupNode", refNode: "BeautifulSoupNode") -> None:
         index = self.element.index(refNode.element)
         if (
             type(node.element) is NavigableString
@@ -501,9 +482,7 @@ class Element(BeautifulSoupNode):
             # children.
             assert new_parents_last_descendant is not None
             new_parents_last_child = new_parent_element.contents[-1]
-            new_parents_last_descendant_next_element = (
-                new_parents_last_descendant.next_element
-            )
+            new_parents_last_descendant_next_element = new_parents_last_descendant.next_element
         else:
             # The new parent contains no children.
             new_parents_last_child = None
@@ -537,9 +516,7 @@ class Element(BeautifulSoupNode):
             # Since we passed accept_self=True into _last_descendant,
             # there's no possibility that the result is None.
             assert last_childs_last_descendant is not None
-            last_childs_last_descendant.next_element = (
-                new_parents_last_descendant_next_element
-            )
+            last_childs_last_descendant.next_element = new_parents_last_descendant_next_element
             if new_parents_last_descendant_next_element is not None:
                 # TODO-COVERAGE: This code has no test coverage and
                 # I'm not sure how to get html5lib to go through this

@@ -34,9 +34,7 @@ class TestHTML5LibBuilder(HTML5TreeBuilderSmokeTest):
 
         [warning] = w
         assert warning.filename == __file__
-        assert "the html5lib tree builder doesn't support parse_only" in str(
-            warning.message
-        )
+        assert "the html5lib tree builder doesn't support parse_only" in str(warning.message)
 
     def test_correctly_nested_tables(self):
         """html5lib inserts <tbody> tags where other parsers don't."""
@@ -106,9 +104,7 @@ class TestHTML5LibBuilder(HTML5TreeBuilderSmokeTest):
         assert tbody2.next_element is space2
 
     def test_reparented_markup_containing_children(self):
-        markup = (
-            "<div><a>aftermath<p><noscript>target</noscript>aftermath</a></p></div>"
-        )
+        markup = "<div><a>aftermath<p><noscript>target</noscript>aftermath</a></p></div>"
         soup = self.soup(markup)
         noscript = soup.noscript
         assert "target" == noscript.next_element
@@ -140,8 +136,7 @@ class TestHTML5LibBuilder(HTML5TreeBuilderSmokeTest):
         markup = b"""<table><td></tbody>A"""
         soup = self.soup(markup)
         assert (
-            "<body>A<table><tbody><tr><td></td></tr></tbody></table></body>"
-            == soup.body.decode()
+            "<body>A<table><tbody><tr><td></td></tr></tbody></table></body>" == soup.body.decode()
         )
 
     def test_extraction(self):

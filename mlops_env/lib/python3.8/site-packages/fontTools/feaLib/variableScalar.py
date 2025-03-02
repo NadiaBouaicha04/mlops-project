@@ -29,9 +29,7 @@ class VariableScalar:
     @property
     def axes_dict(self):
         if not self.axes:
-            raise ValueError(
-                ".axes must be defined on variable scalar before interpolating"
-            )
+            raise ValueError(".axes must be defined on variable scalar before interpolating")
         return {ax.axisTag: ax for ax in self.axes}
 
     def _normalized_location(self, location):
@@ -61,9 +59,7 @@ class VariableScalar:
         self.values[Location(location)] = value
 
     def fix_all_locations(self):
-        self.values = {
-            Location(self.fix_location(l)): v for l, v in self.values.items()
-        }
+        self.values = {Location(self.fix_location(l)): v for l, v in self.values.items()}
 
     @property
     def default(self):

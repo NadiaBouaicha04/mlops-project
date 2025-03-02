@@ -20,9 +20,7 @@ class table_T_S_I__1(LogMixin, DefaultTable.DefaultTable):
     def decompile(self, data, ttFont):
         totalLength = len(data)
         indextable = ttFont[self.indextable]
-        for indices, isExtra in zip(
-            (indextable.indices, indextable.extra_indices), (False, True)
-        ):
+        for indices, isExtra in zip((indextable.indices, indextable.extra_indices), (False, True)):
             programs = {}
             for i, (glyphID, textLength, textOffset) in enumerate(indices):
                 if isExtra:
@@ -61,9 +59,7 @@ class table_T_S_I__1(LogMixin, DefaultTable.DefaultTable):
                         nextTextOffset = indices[i + 1][2]
                     assert nextTextOffset >= textOffset, "entries not sorted by offset"
                     if nextTextOffset > totalLength:
-                        self.log.warning(
-                            "nextTextOffset > totalLength; %r truncated" % name
-                        )
+                        self.log.warning("nextTextOffset > totalLength; %r truncated" % name)
                         nextTextOffset = totalLength
                     textLength = nextTextOffset - textOffset
                 else:
@@ -93,9 +89,7 @@ class table_T_S_I__1(LogMixin, DefaultTable.DefaultTable):
         indices = []
         for i in range(len(glyphNames)):
             if len(data) % 2:
-                data = (
-                    data + b"\015"
-                )  # align on 2-byte boundaries, fill with return chars. Yum.
+                data = data + b"\015"  # align on 2-byte boundaries, fill with return chars. Yum.
             name = glyphNames[i]
             if name in self.glyphPrograms:
                 text = tobytes(self.glyphPrograms[name], encoding="utf-8")
@@ -111,9 +105,7 @@ class table_T_S_I__1(LogMixin, DefaultTable.DefaultTable):
         codes = sorted(self.extras.items())
         for i in range(len(codes)):
             if len(data) % 2:
-                data = (
-                    data + b"\015"
-                )  # align on 2-byte boundaries, fill with return chars.
+                data = data + b"\015"  # align on 2-byte boundaries, fill with return chars.
             code, name = codes[i]
             if name in self.extraPrograms:
                 text = tobytes(self.extraPrograms[name], encoding="utf-8")

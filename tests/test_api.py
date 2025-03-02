@@ -3,11 +3,13 @@ from api import app
 
 client = TestClient(app)
 
+
 def test_health_check():
     """Test du endpoint /"""
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+
 
 def test_predict():
     """Test du endpoint /predict avec des données valides"""
@@ -15,4 +17,3 @@ def test_predict():
     response = client.post("/predict", json=sample_data)
     assert response.status_code == 200
     assert response.json()["prediction"] in ["Churn", "No Churn"]
-

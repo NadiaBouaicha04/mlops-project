@@ -891,8 +891,7 @@ def layerContentsValidator(value, ufoPathOrFileSystem):
             if not directoryName.startswith("glyphs."):
                 return (
                     False,
-                    "Invalid directory name (%s) in layercontents.plist."
-                    % directoryName,
+                    "Invalid directory name (%s) in layercontents.plist." % directoryName,
                 )
         if len(layerName) == 0:
             return False, "Empty layer name in layercontents.plist."

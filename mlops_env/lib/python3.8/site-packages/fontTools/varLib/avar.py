@@ -68,9 +68,7 @@ def _pruneLocations(locations, poles, axisTags):
                             continue
                         if axisTag not in candidateAxes:
                             continue
-                        candidate = {
-                            k: defaultV for k, (_, defaultV, _) in candidate.items()
-                        }
+                        candidate = {k: defaultV for k, (_, defaultV, _) in candidate.items()}
                         if candidate[axisTag] == v:
                             pins[tuple(candidate.items())] = None
                             break
@@ -88,9 +86,7 @@ def mappings_from_avar(font, denormalize=True):
         return {}, {}
     avar = font["avar"]
     axisMaps = {
-        tag: seg
-        for tag, seg in avar.segments.items()
-        if seg and seg != {-1: -1, 0: 0, 1: 1}
+        tag: seg for tag, seg in avar.segments.items() if seg and seg != {-1: -1, 0: 0, 1: 1}
     }
     mappings = []
 
@@ -171,12 +167,8 @@ def mappings_from_avar(font, denormalize=True):
             axisMaps[tag] = {denorm(k): denorm(v) for k, v in seg.items()}
 
         for i, (inputLoc, outputLoc) in enumerate(mappings):
-            inputLoc = {
-                tag: _denormalize(val, axisMap[tag]) for tag, val in inputLoc.items()
-            }
-            outputLoc = {
-                tag: _denormalize(val, axisMap[tag]) for tag, val in outputLoc.items()
-            }
+            inputLoc = {tag: _denormalize(val, axisMap[tag]) for tag, val in inputLoc.items()}
+            outputLoc = {tag: _denormalize(val, axisMap[tag]) for tag, val in outputLoc.items()}
             mappings[i] = (inputLoc, outputLoc)
 
     return axisMaps, mappings
@@ -213,9 +205,7 @@ def main(args=None):
         type=str,
         help="Output font file name.",
     )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Run more verbosely."
-    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Run more verbosely.")
 
     options = parser.parse_args(args)
 

@@ -36,8 +36,7 @@ class table__h_m_t_x(DefaultTable.DefaultTable):
             numberOfMetrics = numGlyphs
         if numberOfMetrics > numGlyphs:
             log.warning(
-                "The %s.%s exceeds the maxp.numGlyphs"
-                % (self.headerTag, self.numberOfMetricsName)
+                "The %s.%s exceeds the maxp.numGlyphs" % (self.headerTag, self.numberOfMetricsName)
             )
             numberOfMetrics = numGlyphs
         if len(data) < 4 * numberOfMetrics:
@@ -81,9 +80,7 @@ class table__h_m_t_x(DefaultTable.DefaultTable):
         for glyphName in ttFont.getGlyphOrder():
             advanceWidth, sideBearing = self.metrics[glyphName]
             if advanceWidth < 0:
-                log.error(
-                    "Glyph %r has negative advance %s" % (glyphName, self.advanceName)
-                )
+                log.error("Glyph %r has negative advance %s" % (glyphName, self.advanceName))
                 hasNegativeAdvances = True
             metrics.append([advanceWidth, sideBearing])
 

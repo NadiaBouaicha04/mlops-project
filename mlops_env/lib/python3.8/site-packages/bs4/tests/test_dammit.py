@@ -195,9 +195,7 @@ class TestEncodingDetector(object):
 
         # known_definite_encodings and override_encodings were tried
         # before user_encodings.
-        assert ["shift-jis", "utf-8", "iso-8859-8"] == (
-            [x[0] for x in dammit.tried_encodings]
-        )
+        assert ["shift-jis", "utf-8", "iso-8859-8"] == ([x[0] for x in dammit.tried_encodings])
 
     def test_detwingle(self):
         # Here's a UTF8 document.
@@ -205,8 +203,7 @@ class TestEncodingDetector(object):
 
         # Here's a Windows-1252 document.
         windows_1252 = (
-            "\N{LEFT DOUBLE QUOTATION MARK}Hi, I like Windows!"
-            "\N{RIGHT DOUBLE QUOTATION MARK}"
+            "\N{LEFT DOUBLE QUOTATION MARK}Hi, I like Windows!" "\N{RIGHT DOUBLE QUOTATION MARK}"
         ).encode("windows_1252")
 
         # Through some unholy alchemy, they've been stuck together.
@@ -268,9 +265,7 @@ class TestEncodingDetector(object):
 
         # But you can tell find_declared_encoding to search an entire
         # HTML document.
-        assert (
-            m(spacer + html_bytes, is_html=True, search_entire_document=True) == "utf-8"
-        )
+        assert m(spacer + html_bytes, is_html=True, search_entire_document=True) == "utf-8"
 
         # The XML encoding declaration has to be the very first thing
         # in the document. We'll allow whitespace before the document
@@ -372,10 +367,7 @@ class TestEntitySubstitution(object):
         assert self.sub.substitute_xml("&Aacute;T&T") == "&amp;Aacute;T&amp;T"
 
     def test_xml_quoting_ignoring_ampersands_when_they_are_part_of_an_entity(self):
-        assert (
-            self.sub.substitute_xml_containing_entities("&Aacute;T&T")
-            == "&Aacute;T&amp;T"
-        )
+        assert self.sub.substitute_xml_containing_entities("&Aacute;T&T") == "&Aacute;T&amp;T"
 
     def test_quotes_not_html_substituted(self):
         """There's no need to do this except inside attribute values."""
@@ -425,9 +417,7 @@ class TestEntitySubstitution(object):
         assert self.sub.substitute_html5(markup) == html5
         assert self.sub.substitute_html5_raw(markup) == html5raw
 
-    @pytest.mark.parametrize(
-        "markup,expect", [("&nosuchentity;", "&amp;nosuchentity;")]
-    )
+    @pytest.mark.parametrize("markup,expect", [("&nosuchentity;", "&amp;nosuchentity;")])
     def test_ambiguous_ampersands_escaped(self, markup, expect):
         assert self.sub.substitute_html(markup) == expect
         assert self.sub.substitute_html5_raw(markup) == expect

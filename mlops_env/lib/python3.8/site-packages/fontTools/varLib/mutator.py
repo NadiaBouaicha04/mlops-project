@@ -213,9 +213,7 @@ def instantiateVariableFont(varfont, location, inplace=False, overlap=True):
         )
         for glyphname in glyphnames:
             variations = gvar.variations[glyphname]
-            coordinates, _ = glyf._getCoordinatesAndControls(
-                glyphname, hMetrics, vMetrics
-            )
+            coordinates, _ = glyf._getCoordinatesAndControls(glyphname, hMetrics, vMetrics)
             origCoords, endPts = None, None
             for var in variations:
                 scalar = supportScalar(loc, var.axes)
@@ -311,9 +309,7 @@ def instantiateVariableFont(varfont, location, inplace=False, overlap=True):
             if applies:
                 assert record.FeatureTableSubstitution.Version == 0x00010000
                 for rec in record.FeatureTableSubstitution.SubstitutionRecord:
-                    table.FeatureList.FeatureRecord[rec.FeatureIndex].Feature = (
-                        rec.Feature
-                    )
+                    table.FeatureList.FeatureRecord[rec.FeatureIndex].Feature = rec.Feature
                 break
         del table.FeatureVariations
 
@@ -381,9 +377,7 @@ def instantiateVariableFont(varfont, location, inplace=False, overlap=True):
         # Change maxp attributes as IDEF is added
         if "maxp" in varfont:
             maxp = varfont["maxp"]
-            setattr(
-                maxp, "maxInstructionDefs", 1 + getattr(maxp, "maxInstructionDefs", 0)
-            )
+            setattr(maxp, "maxInstructionDefs", 1 + getattr(maxp, "maxInstructionDefs", 0))
             setattr(
                 maxp,
                 "maxStackElements",
@@ -408,9 +402,7 @@ def instantiateVariableFont(varfont, location, inplace=False, overlap=True):
             if set(excludedUnicodeLangIDs) == set(range(len((varfont["ltag"].tags)))):
                 del varfont["ltag"]
         varfont["name"].names[:] = [
-            n
-            for n in varfont["name"].names
-            if n.nameID < 256 or n.nameID not in exclude
+            n for n in varfont["name"].names if n.nameID < 256 or n.nameID not in exclude
         ]
 
     if "wght" in location and "OS/2" in varfont:
@@ -465,12 +457,8 @@ def main(args=None):
         help="Don't set the output font's timestamp to the current time.",
     )
     logging_group = parser.add_mutually_exclusive_group(required=False)
-    logging_group.add_argument(
-        "-v", "--verbose", action="store_true", help="Run more verbosely."
-    )
-    logging_group.add_argument(
-        "-q", "--quiet", action="store_true", help="Turn verbosity off."
-    )
+    logging_group.add_argument("-v", "--verbose", action="store_true", help="Run more verbosely.")
+    logging_group.add_argument("-q", "--quiet", action="store_true", help="Turn verbosity off.")
     parser.add_argument(
         "--no-overlap",
         dest="overlap",
@@ -481,13 +469,9 @@ def main(args=None):
 
     varfilename = options.input
     outfile = (
-        os.path.splitext(varfilename)[0] + "-instance.ttf"
-        if not options.output
-        else options.output
+        os.path.splitext(varfilename)[0] + "-instance.ttf" if not options.output else options.output
     )
-    configLogger(
-        level=("DEBUG" if options.verbose else "ERROR" if options.quiet else "INFO")
-    )
+    configLogger(level=("DEBUG" if options.verbose else "ERROR" if options.quiet else "INFO"))
 
     loc = {}
     for arg in options.locargs:

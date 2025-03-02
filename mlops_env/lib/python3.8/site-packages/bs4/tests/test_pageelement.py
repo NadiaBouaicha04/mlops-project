@@ -95,24 +95,16 @@ class TestFormatters(SoupTest):
         )
 
     def test_formatter_html(self):
-        markup = (
-            "<br><b>&lt;&lt;Sacr\N{LATIN SMALL LETTER E WITH ACUTE} bleu!&gt;&gt;</b>"
-        )
+        markup = "<br><b>&lt;&lt;Sacr\N{LATIN SMALL LETTER E WITH ACUTE} bleu!&gt;&gt;</b>"
         soup = self.soup(markup)
         decoded = soup.decode(formatter="html")
-        assert decoded == self.document_for(
-            "<br/><b>&lt;&lt;Sacr&eacute; bleu!&gt;&gt;</b>"
-        )
+        assert decoded == self.document_for("<br/><b>&lt;&lt;Sacr&eacute; bleu!&gt;&gt;</b>")
 
     def test_formatter_html5(self):
-        markup = (
-            "<br><b>&lt;&lt;Sacr\N{LATIN SMALL LETTER E WITH ACUTE} bleu!&gt;&gt;</b>"
-        )
+        markup = "<br><b>&lt;&lt;Sacr\N{LATIN SMALL LETTER E WITH ACUTE} bleu!&gt;&gt;</b>"
         soup = self.soup(markup)
         decoded = soup.decode(formatter="html5")
-        assert decoded == self.document_for(
-            "<br><b>&lt;&lt;Sacr&eacute; bleu!&gt;&gt;</b>"
-        )
+        assert decoded == self.document_for("<br><b>&lt;&lt;Sacr&eacute; bleu!&gt;&gt;</b>")
 
     def test_formatter_minimal(self):
         markup = "<b>&lt;&lt;Sacr\N{LATIN SMALL LETTER E WITH ACUTE} bleu!&gt;&gt;</b>"
@@ -233,9 +225,7 @@ class TestFormatters(SoupTest):
     def test_encoding_substitution(self):
         # Here's the <meta> tag saying that a document is
         # encoded in Shift-JIS.
-        meta_tag = (
-            '<meta content="text/html; charset=x-sjis" ' 'http-equiv="Content-type"/>'
-        )
+        meta_tag = '<meta content="text/html; charset=x-sjis" ' 'http-equiv="Content-type"/>'
         soup = self.soup(meta_tag)
 
         # Parse the document, and the charset apprears unchanged.
@@ -408,8 +398,8 @@ class TestEquality(SoupTest):
 
     def test_comparison(self):
         soup = self.soup("<a>string</a> <a>string</a>")
-        first_a, second_a = soup.find_all('a')
-        first_string, second_string = soup.find_all(string='string')
+        first_a, second_a = soup.find_all("a")
+        first_string, second_string = soup.find_all(string="string")
 
         # Tags with the same markup are equal.
         assert first_a == second_a
@@ -423,8 +413,8 @@ class TestEquality(SoupTest):
 
     def test_hash(self):
         soup = self.soup("<a>string</a> <a>string</a>")
-        first_a, second_a = soup.find_all('a')
-        first_string, second_string = soup.find_all(string='string')
+        first_a, second_a = soup.find_all("a")
+        first_string, second_string = soup.find_all(string="string")
 
         # Tags with the same markup hash to the same value.
         assert hash(first_a) == hash(second_a)

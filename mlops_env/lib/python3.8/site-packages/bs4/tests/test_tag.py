@@ -221,9 +221,7 @@ class TestMultiValuedAttributes(SoupTest):
         # Here, 'id' is a multi-valued attribute and 'class' is not.
         #
         # TODO: This code is in the builder and should be tested there.
-        soup = self.soup(
-            '<a class="foo" id="bar">', multi_valued_attributes={"*": "id"}
-        )
+        soup = self.soup('<a class="foo" id="bar">', multi_valued_attributes={"*": "id"})
         assert soup.a["class"] == "foo"
         assert soup.a["id"] == ["bar"]
 
