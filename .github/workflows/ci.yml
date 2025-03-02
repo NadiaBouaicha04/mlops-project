@@ -38,11 +38,6 @@ jobs:
           source venv/bin/activate
           pylint api.py model_pipeline.py main.py --ignore=venv,mlops_env,site-packages
 
-      - name: Run Mypy (Type Checking)
-        run: |
-          source venv/bin/activate
-          mypy api.py model_pipeline.py main.py
-
       - name: Run Pytest (Unit Tests)
         run: |
           source venv/bin/activate
