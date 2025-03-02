@@ -16,7 +16,7 @@ MODEL_NAME: str = "ChurnPredictionModel"
 MODEL_VERSION: str = "1"
 
 try:
-    MODEL = mlflow.pyfunc.load_model(f"models:/{MODEL_NAME}/{MODEL_VERSION}")
+    MODEL = mlflow.pyfunc.load_model(f"models:/{MODEL_NAME}/1")  
     print(
         f"✅ Modèle {MODEL_NAME} (version {MODEL_VERSION}) " "chargé depuis MLflow Model Registry"
     )
